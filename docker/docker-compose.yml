@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  php:
+    build: .
+    container_name: ${CONTAINER_NAME}
+    ports:
+      - 1234:80
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./apache2/httpd-vhosts.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ../source/:/var/www/html/
+      - ../.env:/var/www/html/.env
+    depends_on:
+      - mysqldb
+  myadmin:
+    image: phpmyadmin/phpmyadmin:4.7
+    container_name: ${CONTAINER_NAME}-phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=${CONTAINER_NAME}-${DB_CONNECTION}
+    restart: always
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:5.7.21
+    container_name: ${CONTAINER_NAME}-${DB_CONNECTION}
+    restart: always
+    env_file:
+      - ../.env
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/lib/mysql
