@@ -1,14 +1,15 @@
-FROM php:7.0.30-apache
+FROM php:7.3-apache
 LABEL maintainer="Patrick Greene <bytebuddha@protonmail.com>"
 
 RUN a2enmod rewrite
 
 RUN apt-get update \
   && apt-get install -y zlib1g-dev libicu-dev wget gnupg g++ git openssh-client libpng-dev \
+  && apt-get install -y libzip-dev unzip \
   && docker-php-ext-configure intl \
   && docker-php-ext-install intl pdo_mysql zip
 
-RUN pecl install xdebug-2.5.5 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-2.7.0RC2 && docker-php-ext-enable xdebug
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
@@ -19,7 +20,3 @@ RUN apt-get update \
   && apt-get install -y yarn
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-#RUN chgrp -R www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-#RUN chmod -R ug+rwx /var/www/html/storage /var/www/html/bootstrap/cache
