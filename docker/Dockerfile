@@ -1,5 +1,5 @@
 FROM php:7.3-apache
-LABEL maintainer="Patrick Greene <bytebuddha@protonmail.com>"
+LABEL maintainer="Patrick Greene <pmg41494@protonmail.com>"
 
 RUN a2enmod rewrite
 
@@ -7,7 +7,7 @@ RUN apt-get update \
   && apt-get install -y zlib1g-dev libicu-dev wget gnupg g++ git openssh-client libpng-dev \
   && apt-get install -y libzip-dev unzip \
   && docker-php-ext-configure intl \
-  && docker-php-ext-install intl pdo_mysql zip
+  && docker-php-ext-install intl pdo_mysql zip bcmath
 
 RUN pecl install xdebug-2.7.0RC2 && docker-php-ext-enable xdebug
 
