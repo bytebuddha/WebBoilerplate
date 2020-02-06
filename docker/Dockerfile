@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 LABEL maintainer="Patrick Greene <pmg41494@protonmail.com>"
 
 RUN a2enmod rewrite
@@ -9,9 +9,9 @@ RUN apt-get update \
   && docker-php-ext-configure intl \
   && docker-php-ext-install intl pdo_mysql zip bcmath
 
-RUN pecl install xdebug-2.7.0RC2 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-2.9.2 && docker-php-ext-enable xdebug
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
   && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
